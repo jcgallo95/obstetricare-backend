@@ -1,10 +1,15 @@
 const webpush = require('web-push');
 
-webpush.setVapidDetails(
-  process.env.VAPID_EMAIL,
-  process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
-);
+// Solo inicializar VAPID si las variables están configuradas
+if (process.env.VAPID_EMAIL && process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+  webpush.setVapidDetails(
+    process.env.VAPID_EMAIL,
+    process.env.VAPID_PUBLIC_KEY,
+    process.env.VAPID_PRIVATE_KEY
+  );
+} else {
+  console.log('⚠️  VAPID no configurado — las notificaciones push están desactivadas');
+}
 
 // ── Enviar notificación a un usuario ──
 async function enviarNotificacion(usuarioOId, tipo, { titulo, cuerpo, referencia_id }, dbClient, esPaciente = false) {
