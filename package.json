@@ -1,0 +1,28 @@
+{
+  "name": "obstetricare-backend",
+  "version": "1.0.0",
+  "description": "Backend de ObstetriCare — Guardia Obstétrica Virtual",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "db:migrate": "psql $DATABASE_URL -f src/models/schema.sql",
+    "db:seed": "node src/models/seed.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mercadopago": "^2.0.6",
+    "pg": "^8.11.3",
+    "uuid": "^9.0.0",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
