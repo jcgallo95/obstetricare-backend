@@ -25,7 +25,7 @@ app.use('/api/', rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
   max: 100,
   message: { error: 'Demasiadas solicitudes. Intentá de nuevo en 15 minutos.' }
-});
+}));
 
 // Rate limit más estricto para auth
 app.use('/api/auth/', rateLimit({
