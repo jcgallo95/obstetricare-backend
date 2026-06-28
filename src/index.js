@@ -7,27 +7,32 @@ const routes     = require('./routes');
 const { verificarBloqueosAutomaticos } = require('./controllers/webhookController');
 
 const app  = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 // ── Seguridad ──
 app.use(helmet());
 app.use(cors({
-  origin: [
-    'https://jcgallo95.github.io',  // PWA en GitHub Pages
-    'http://localhost:3000',         // desarrollo local
-  ],
+  origin: function(origin, callback) {
+    // Sin origin: archivos locales, Postman, etc.
+    if (!origin) return callback(null, true);
+    // Permitir cualquier subdominio de github.io y localhost
+    if (origin.endsWith('.github.io') || origin.includes('localhost') || origin.includes('127.0.0.1')) {
+      return callback(null, true);
+    }
+    callback(new Error('No permitido por CORS'));
+  },
   methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 }));
 
-// ── Rate limiting — evitar abuso ──
+// ── Rate limiting ──
 app.use('/api/', rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
+  windowMs: 15 * 60 * 1000,
   max: 100,
   message: { error: 'Demasiadas solicitudes. Intentá de nuevo en 15 minutos.' }
 }));
 
-// Rate limit más estricto para auth
 app.use('/api/auth/', rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
